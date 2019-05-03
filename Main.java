@@ -1,13 +1,12 @@
-package LabSession3;
+package Assigment3;
 
 public class Main {
-
     public static void main(String[] args) {
-
-        thread s1=new thread();
-        s1.setName("MyjavaThread");
-//        s1.start();
-        SubThread s2=new SubThread();
+        thread1 s1=new thread1();
+        thread2 s2=new thread2();
+        thread3 s3=new thread3();
+        s1.start();
         s2.start();
+        s3.start();
     }
 }
