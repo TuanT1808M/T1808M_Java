@@ -1,50 +1,63 @@
 package sample;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.sql.*;
+import java.util.Scanner;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class Controller {
-    public Button btnLogin;
-    public Button btnRegister;
-    public Button btnListing;
-    public Button btnExit;
+    public TextField id;
+    public TextField username;
+    public TextField email;
+    public TextField password;
+    public TextField status;
+    public TextArea print;
 
-    public RadioButton rdVN;
-    public RadioButton rdEN;
 
-    public void setLanguage(){
-        ResourceBundle rb = ResourceBundle.getBundle("sample.Language");
-        btnLogin.setText(rb.getString("login"));
-        btnRegister.setText(rb.getString("register"));
-        btnListing.setText(rb.getString("listing"));
-        btnExit.setText(rb.getString("exit"));
+
+    public class Connector {
+        public Connection conect;
+        public void main(String[] args) {
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                String URL="jdbc:mysql://locahost:8888/t1808m";
+                this.conect= DriverManager.getConnection(URL,"NGuyenTruongadmin","anhtruong01");
+            }catch (Exception e ){
+                e.printStackTrace();
+            }
+        }
+        public ResultSet getQuery(String sql) throws Exception{
+            Statement sttm=conect.createStatement();
+            return sttm.executeQuery(sql);
+        }
+        public Integer updateQuery(String sql)throws Exception{
+            Statement sttm=conect.createStatement();
+            return sttm.executeUpdate(sql);
+        }
+    }
+    public void register() throws Exception{
+
+
     }
 
-    public void changeVN(){
-        Locale vi = new Locale("vi","VN");
-        Locale.setDefault(vi);
-        setLanguage();
+    public void button(Connection conect) throws Exception {
+        String x=id.getText();
+        String y=status.getText();
+        String z=username.getText();
+        String g=password.getText();
+        String h=email.getText();
+        Statement sttm = conect.createStatement();
+        String insert_sql="INSERT INTO user(id,username,email,password,status) VALUES" +
+                "('"+x+"','"+z+"','"+h+"','"+g+"','"+y+"')";
 
-        rdEN.setSelected(false);
-        rdVN.setSelected(true);
-    }
-
-    public void changeEN(){
-        Locale.setDefault(Locale.US);
-        setLanguage();
-
-        rdEN.setSelected(true);
-        rdVN.setSelected(false);
-    }
-
-    public void changeLogin() throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("login.fxml"));
-        Main.mainStage.getScene().setRoot(root);
-    }
+        sttm.executeUpdate(insert_sql);
+        print.setText("Đăng kí thành công");
+    };
 
 }
